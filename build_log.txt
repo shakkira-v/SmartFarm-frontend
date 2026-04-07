@@ -1,0 +1,85 @@
+﻿
+> frontend@0.0.0 build
+> vite build
+
+[36mvite v7.3.1 [32mbuilding client environment for production...[36m[39m
+transforming...
+[32mΓ£ô[39m 24 modules transformed.
+node.exe : [31mΓ£ù[39m 
+Build failed in 747ms
+At line:1 char:1
++ & "C:\Program 
+Files\nodejs/node.exe" "C:
+\Users\SHAKKIRA\AppData\Ro
+ami ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo        
+      : NotSpecified: (  
+  [31mΓ£ù[39m Build fa   
+ iled in 747ms:String)    
+ [], RemoteException
+    + FullyQualifiedError 
+   Id : NativeCommandErr  
+  or
+ 
+[31merror during build:
+[31m[vite:css] [postcss] 
+postcss-import: C:\FinalP\
+Smart-Farm-Security\fronte
+nd\node_modules\tailwindcs
+s\lib\index.js:1:1: 
+Unknown word "use 
+strict"[31m
+file: [36mC:\FinalP\Smart
+-Farm-Security\frontend\no
+de_modules\tailwindcss\lib
+\index.js:1:0 (C:/FinalP/S
+mart-Farm-Security/fronten
+d/src/App.css)[31m
+    at Input.error (C:\Fin
+alP\Smart-Farm-Security\fr
+ontend\node_modules\postcs
+s\lib\input.js:135:16)
+    at Parser.unknownWord 
+(C:\FinalP\Smart-Farm-Secu
+rity\frontend\node_modules
+\postcss\lib\parser.js:595
+:22)
+    at Parser.other (C:\Fi
+nalP\Smart-Farm-Security\f
+rontend\node_modules\postc
+ss\lib\parser.js:437:12)
+    at Parser.parse (C:\Fi
+nalP\Smart-Farm-Security\f
+rontend\node_modules\postc
+ss\lib\parser.js:472:16)
+    at parse (C:\FinalP\Sm
+art-Farm-Security\frontend
+\node_modules\postcss\lib\
+parse.js:11:12)
+    at get root (C:\FinalP
+\Smart-Farm-Security\front
+end\node_modules\postcss\l
+ib\no-work-result.js:43:14
+)
+    at Result.get [as 
+root] (C:\FinalP\Smart-Far
+m-Security\frontend\node_m
+odules\postcss\lib\no-work
+-result.js:77:21)
+    at loadImportContent (
+file:///C:/FinalP/Smart-Fa
+rm-Security/frontend/node_
+modules/vite/dist/node/chu
+nks/postcss-import.js:408:
+33)
+    at async Promise.all 
+(index 0)
+    at async 
+resolveImportId (file:///C
+:/FinalP/Smart-Farm-Securi
+ty/frontend/node_modules/v
+ite/dist/node/chunks/postc
+ss-import.js:387:20)[39m
