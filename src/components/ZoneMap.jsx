@@ -68,8 +68,8 @@ const ZoneMap = ({ zones: initialZones }) => {
             key={zone._id}
             className={`absolute group/zone transition-all duration-500 hover:z-50`}
             style={{
-              top: zone.position?.top || "0%",
-              left: zone.position?.left || "0%",
+              top: String(zone.position?.top || "0").includes("%") ? zone.position.top : `${zone.position.top || 0}%`,
+              left: String(zone.position?.left || "0").includes("%") ? zone.position.left : `${zone.position.left || 0}%`,
             }}
           >
             {/* Blip Animation */}

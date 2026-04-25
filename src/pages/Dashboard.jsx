@@ -73,7 +73,7 @@ const Dashboard = () => {
   ]);
 
   const socketRef = useRef();
-  const audioRef = useRef(new Audio("https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3"));
+  const audioRef = useRef(new Audio("https://actions.google.com/sounds/v1/alarms/beep_short.ogg"));
 
   const isAdmin = user?.role === "admin";
   const isManager = user?.role === "manager";
@@ -81,8 +81,8 @@ const Dashboard = () => {
   
   // High-level role permissions
   const canSeeSimulations = isAdmin || isManager || isViewer;
-  const canManageSimulation = isManager; // Restrict simulation controls to Manager as requested
-  const canManageZones = isManager; // Restrict zone management to Manager as requested
+  const canManageSimulation = isAdmin || isManager; // Allow Admins and Managers to control simulation
+  const canManageZones = isAdmin || isManager; // Allow Admins and Managers to manage zones
 
 
 
@@ -198,7 +198,8 @@ const refreshDashboard = useCallback(() => {
 
   useEffect(() => {
     // 🔌 Setup Socket Connection
-    const SOCKET_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+    const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+    const SOCKET_URL = API_URL.replace(/\/api\/?$/, ""); // Remove /api suffix
     socketRef.current = io(SOCKET_URL);
 
     // 👂 Listen for New Intrusions
@@ -206,6 +207,7 @@ const refreshDashboard = useCallback(() => {
       console.log("[SOCKET] New Alert:", data);
       
       // 1. Play Alarm Sound 🔊
+      audioRef.current.currentTime = 0;
       audioRef.current.play().catch(() => console.log("Audio Auto-play blocked by browser."));
 
       // 2. Show Premium Toast 🍞

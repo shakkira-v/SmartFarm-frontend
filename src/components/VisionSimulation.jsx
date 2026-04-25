@@ -8,6 +8,7 @@ const videoSources = {
   elephant: "https://assets.mixkit.co/videos/preview/mixkit-elephants-walking-in-the-grass-1172-large.mp4",
   boar: "https://v.ftcdn.net/05/24/85/38/700_F_524853828_oYlXJ9zN8GjWunT9i8JjZ8Y1iLzXh5zQ_ST.mp4",
   deer: "https://assets.mixkit.co/videos/preview/mixkit-deer-in-the-wild-at-night-42668-large.mp4",
+  fox: "https://assets.mixkit.co/videos/preview/mixkit-stray-dog-walking-on-a-pavement-42665-large.mp4",
   dog: "https://assets.mixkit.co/videos/preview/mixkit-stray-dog-walking-on-a-pavement-42665-large.mp4",
   cow: "https://assets.mixkit.co/videos/preview/mixkit-cows-grazing-in-the-field-1176-large.mp4",
   monkey: "https://assets.mixkit.co/videos/preview/mixkit-monkey-climbing-a-tree-42667-large.mp4",
@@ -26,6 +27,10 @@ const VisionSimulation = ({ zones, onRefresh }) => {
   const videoRef = useRef(null);
 
   const handleTogglePlay = () => {
+    if (!selectedZone) {
+      toast.error("Please select a Grid Target (Zone) to access camera feeds.", { id: 'zone-req', icon: '📡' });
+      return;
+    }
     if (videoRef.current) {
       if (isPlaying) {
         videoRef.current.pause();
@@ -36,10 +41,23 @@ const VisionSimulation = ({ zones, onRefresh }) => {
     }
   };
 
+  const handleToggleAutoScan = () => {
+    if (!selectedZone) {
+      toast.error("Cannot activate Auto Scan without a Grid Target.", { id: 'zone-req', icon: '📡' });
+      return;
+    }
+    setIsAutoScanning(!isAutoScanning);
+  };
+
   const triggerVisionAlert = useCallback(async () => {
     if (!selectedZone) {
-      toast.error("Please select a target zone first");
+      toast.error("Please select a target zone first", { id: 'zone-req' });
       return;
+    }
+
+    if (videoRef.current && !isPlaying) {
+      videoRef.current.play();
+      setIsPlaying(true);
     }
 
     setIsAnalyzing(true);
@@ -186,7 +204,7 @@ const VisionSimulation = ({ zones, onRefresh }) => {
                 <h2 className="text-sm font-black text-white uppercase tracking-wider">Vision Intelligence</h2>
               </div>
               <button 
-                onClick={() => setIsAutoScanning(!isAutoScanning)}
+                onClick={handleToggleAutoScan}
                 className={`flex items-center gap-2 px-3 py-1.5 rounded-lg border transition-all ${
                   isAutoScanning 
                   ? "bg-emerald-500/20 border-emerald-500 text-emerald-400" 
@@ -206,11 +224,18 @@ const VisionSimulation = ({ zones, onRefresh }) => {
               <div className="space-y-1.5">
                 <label className="text-[9px] font-black text-emerald-500 uppercase tracking-widest block ml-1">Grid Target</label>
                 <select 
-                  className="w-full bg-emerald-950/50 border border-emerald-800 text-white text-[11px] rounded-xl px-3 py-2 outline-none focus:ring-1 focus:ring-emerald-500 transition-all font-bold"
+                  className={`w-full bg-emerald-950/50 border text-[11px] rounded-xl px-3 py-2 outline-none focus:ring-1 focus:ring-emerald-500 transition-all font-bold ${!selectedZone ? 'border-red-500/50 text-red-200 animate-pulse' : 'border-emerald-800 text-white'}`}
                   value={selectedZone}
-                  onChange={(e) => setSelectedZone(e.target.value)}
+                  onChange={(e) => {
+                    setSelectedZone(e.target.value);
+                    if (!e.target.value) {
+                      setIsPlaying(false);
+                      setIsAutoScanning(false);
+                      if (videoRef.current) videoRef.current.pause();
+                    }
+                  }}
                 >
-                  <option value="">Select Zone</option>
+                  <option value="">-- SELECT REQUIRED --</option>
                   {zones.map(z => <option key={z._id} value={z._id}>{z.name}</option>)}
                 </select>
               </div>
@@ -260,7 +285,7 @@ const VisionSimulation = ({ zones, onRefresh }) => {
               </button>
               <button 
                 onClick={triggerVisionAlert}
-                disabled={!isPlaying || isAnalyzing || isAutoScanning}
+                disabled={isAnalyzing || isAutoScanning}
                 className={`flex-1 flex items-center justify-center gap-3 px-6 py-3 rounded-xl font-black text-[11px] uppercase tracking-wider transition-all active:scale-[0.98] ${
                   isAnalyzing 
                   ? "bg-amber-500/20 text-amber-500 border border-amber-500/30" 
